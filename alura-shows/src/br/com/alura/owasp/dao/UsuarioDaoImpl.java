@@ -30,10 +30,18 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		}
 	}
 
+	/**
+	 * Retrieves a user from the database based on the provided email and password.
+	 *
+	 * @param  usuario the user object containing the email and password to search for
+	 * @return         the user object if found, null otherwise
+	 * @throws RuntimeException if an error occurs while executing the database query
+	 */
 	public Usuario procuraUsuario(Usuario usuario) {
 		String query = "SELECT * FROM Usuario WHERE email=" + "'"
 				+ usuario.getEmail() + "'" + " and senha=" + "'"
 				+ usuario.getSenha() + "';";
+
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet results = statement.executeQuery(query);
