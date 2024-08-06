@@ -19,11 +19,10 @@ public class GoogleWebClient {
      *
      * @param  gRecaptchaResponse the response from the reCAPTCHA widget
      */
-    public void validaCaptcha(String gRecaptchaResponse) throws IOException {
-        Call<String> call = retrofit.getGoogleService()
-                .verificaCaptcha(SECRET, gRecaptchaResponse);
+    public boolean validaCaptcha(String gRecaptchaResponse) throws IOException {
+        Call<Resposta> call = retrofit.getGoogleService().verificaCaptcha(SECRET, gRecaptchaResponse);
 
-        call.execute().body();
+        return call.execute().body().isSuccess();
     }
 
 }

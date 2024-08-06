@@ -6,7 +6,7 @@ import retrofit2.http.Query;
 
 public interface GoogleService {
 
-    @POST("/siteverify")
-    Call<String> verificaCaptcha(@Query("secret") String secret, @Query("response") String gRecaptchaResponse);
+    @POST("siteverify")
+    Call<Resposta> verificaCaptcha(@Query("secret") String secret, @Query("response") String gRecaptchaResponse);
 
 }

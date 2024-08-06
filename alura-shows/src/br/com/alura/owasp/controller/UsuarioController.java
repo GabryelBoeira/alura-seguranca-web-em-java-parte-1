@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import br.com.alura.owasp.retrofit.GoogleWebClient;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,20 +62,29 @@ public class UsuarioController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@ModelAttribute("usuario") Usuario usuario,
 			RedirectAttributes redirect, Model model, HttpSession session, HttpServletRequest request) throws IllegalStateException, IOException {
-		String recaptchaJson = request.getParameter("g-recaptcha-response");
 
-		googleWebClient.validaCaptcha(recaptchaJson);
+		String recaptcha = request.getParameter("g-recaptcha-response");
+
+		if (StringUtils.isAllBlank(recaptcha)) {
+			redirect.addFlashAttribute("mensagem", "Captcha deve ser preenchido corretamente");
+			return "redirect:/usuario";
+		}
+
+		if (!googleWebClient.validaCaptcha(recaptcha)) {
+			model.addAttribute("usuario", usuario);
+			redirect.addFlashAttribute("mensagem", "Captcha invalido, comprove que você é humano");
+			return "redirect:/usuario";
+		}
 
 		Usuario usuarioRetornado = dao.procuraUsuario(usuario);
-		model.addAttribute("usuario", usuarioRetornado);
 		if (usuarioRetornado == null) {
+			model.addAttribute("usuario", usuario);
 			redirect.addFlashAttribute("mensagem", "Usuário não encontrado");
 			return "redirect:/usuario";
 		}
 
 		session.setAttribute("usuario", usuarioRetornado);
 		return "usuarioLogado";
-
 	}
 
 	@RequestMapping("/logout")
