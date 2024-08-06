@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import br.com.alura.owasp.retrofit.GoogleWebClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,9 @@ public class UsuarioController {
 
 	@Autowired
 	private UsuarioDao dao;
+
+	@Autowired
+	private GoogleWebClient googleWebClient;
 
 	@RequestMapping("/usuario")
 	public String usuario(Model model) {
@@ -56,8 +60,10 @@ public class UsuarioController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@ModelAttribute("usuario") Usuario usuario,
-			RedirectAttributes redirect, Model model, HttpSession session, HttpServletRequest request) {
+			RedirectAttributes redirect, Model model, HttpSession session, HttpServletRequest request) throws IllegalStateException, IOException {
 		String recaptchaJson = request.getParameter("g-recaptcha-response");
+
+		googleWebClient.validaCaptcha(recaptchaJson);
 
 		Usuario usuarioRetornado = dao.procuraUsuario(usuario);
 		model.addAttribute("usuario", usuarioRetornado);
