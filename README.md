@@ -15,3 +15,8 @@ Segurança web em Java: evitando SQL Injection, força bruta e outros ataques
   - Spring Framework, JDPC 
   - MySQL 8
   - Front-End em .JSP
+
+## Certificado do curso
+  - [Certificado de conclusão](https://cursos.alura.com.br/user/gboeira/course/seguranca-web-em-java-parte-1/certificate)
+
+  **_ CURSO CONCLUIDO_**
